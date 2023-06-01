@@ -22,7 +22,7 @@ class Home extends BaseController
       $auth = $this->authentication();
       if ($auth->code != 200)
       {
-        $this->load->error($auth->code,$auth->msg);
+        $this->error($auth->code,$auth->msg);
       }
 
       // school details
@@ -31,7 +31,7 @@ class Home extends BaseController
 
       // teachers
       $teachers = array();
-      foreach ($this->school->employees->all(['employment_details','classes']) as $employee) 
+      foreach ($this->school->employees->all(['employment_details','classes'], ['has_class'=>'1']) as $employee) 
       {
         $is_current = $employee->employment_details->data->current;
         $is_teacher = $employee->employment_details->data->teaching_staff;
@@ -43,7 +43,7 @@ class Home extends BaseController
 
       // order by surname 
       array_multisort(
-      array_column($teachers,'surname'), SORT_ASC,$teachers);
+      array_column($teachers,'surname'),SORT_ASC,$teachers);
       $data['teachers'] = $teachers;
       return view('school_homepage',$data);
     }
@@ -53,13 +53,19 @@ class Home extends BaseController
       $teacher_id = ($_POST['teacher_id']) ? $_POST['teacher_id'] : FALSE;
       if ( ! $teacher_id)
       {
-        $this->load->error(404,'Requires a Teacher id');
+        $this->error(404,'Requires a Teacher id');
       }      
-      echo '<pre>';
-      print_r($teacher_id);
-      echo '</pre>';
-      die();
-      die();
+
+      foreach ($this->school->employees->all(['classes'], ['only_mis_ids'=>$teacher_id]) as $teacher) 
+      {
+        foreach ($teacher->classes as $tc)
+        {
+         echo '<pre>';
+         print_r($tc);
+         echo '</pre>';
+         die();
+        }
+      }
     }
 
     private function authentication()
@@ -105,9 +111,8 @@ class Home extends BaseController
       }
     }
 
-    private function load_error($code,$msg)
+    private function error($code,$msg)
     {
-      // if authentication is not approved
       return view('custom_error',array('code'=>$code,'msg'=>$msg));
     }
 }

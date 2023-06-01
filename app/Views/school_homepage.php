@@ -247,7 +247,7 @@
       </thead>
       <tbody>
         <?php foreach ($teachers as $teacher): ?>
-        <tr class='table-row' data-teacher_id=<?php echo htmlspecialchars($teacher->id);?>>
+        <tr class='table-row' data-teacher_id=<?php echo htmlspecialchars($teacher->mis_id);?>>
             <th scope="row"><?php echo htmlspecialchars($teacher->surname);?>, <?php echo htmlspecialchars($teacher->forename);?></th>
             <td><?php echo htmlspecialchars($teacher->title);?></td>
             <td><?php echo htmlspecialchars($teacher->initials);?></td>
