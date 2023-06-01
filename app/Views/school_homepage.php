@@ -235,7 +235,7 @@
 
 <section>
 
-    <h3>Please select the Employee whose schedule you wish to see, from the list below:</h3>
+    <h3>Please select the Teacher, whose schedule you wish to see:</h3>
     <table class="table table-bordered table-condensed table-striped table-hover">
       <thead class="thead-light">
         <tr>
@@ -246,15 +246,18 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($employees as $employee): ?>
-        <tr class='table-row' data-href="<?php echo site_url('get_lessons_for_employee/'.$employee->id);?>">
-            <th scope="row"><?php echo htmlspecialchars($employee->surname);?>, <?php echo htmlspecialchars($employee->forename);?></th>
-            <td><?php echo htmlspecialchars($employee->title);?></td>
-            <td><?php echo htmlspecialchars($employee->initials);?></td>
-            <td><?php echo htmlspecialchars($employee->mis_id);?></td>
+        <?php foreach ($teachers as $teacher): ?>
+        <tr class='table-row' data-teacher_id=<?php echo htmlspecialchars($teacher->id);?>>
+            <th scope="row"><?php echo htmlspecialchars($teacher->surname);?>, <?php echo htmlspecialchars($teacher->forename);?></th>
+            <td><?php echo htmlspecialchars($teacher->title);?></td>
+            <td><?php echo htmlspecialchars($teacher->initials);?></td>
+            <td><?php echo htmlspecialchars($teacher->mis_id);?></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
+      <form style="display: none" action="<?php echo site_url('teacher_classes/');?>" method="POST" id="teacher_classes_form">
+        <input type="hidden" id="teacher_id" name="teacher_id" value=""/>
+      </form>
     </table>
 
 </section>
@@ -291,7 +294,8 @@
     }
     $(document).ready(function($) {
     $(".table-row").click(function() {
-        window.document.location = $(this).data("href");
+      $("#teacher_id").val($(this).data("teacher_id"));
+      $("#teacher_classes_form").submit();
     });
   });
 </script>

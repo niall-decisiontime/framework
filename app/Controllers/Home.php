@@ -14,6 +14,7 @@ class Home extends BaseController
       $this->api_token = '2302e6c82cb36c3ad619d9372b9f6808ba2a560c'; ///needs to move to env variable
       $this->school_id = 'A1930499544'; 
       $this->client = new \Wonde\Client($this->api_token);
+      $this->school = $this->client->school($this->school_id);
     }
 
     public function index()
@@ -21,23 +22,44 @@ class Home extends BaseController
       $auth = $this->authentication();
       if ($auth->code != 200)
       {
-        // if authentication is not approved
-        return view('custom_error',array('code'=>$auth->code,'msg'=>$auth->msg));
+        $this->load->error($auth->code,$auth->msg);
       }
 
       // school details
       $school = $this->client->schools->get($this->school_id);
       $data['school'] = $school;
-      
-      // teachers
-      $employees = $this->client->school($this->school_id);
-      $employees = $employees->employees->all()->array;;
-      array_multisort(
-        array_column($employees,'surname'), SORT_ASC,
-        $employees);
-      $data['employees'] = $employees;
 
+      // teachers
+      $teachers = array();
+      foreach ($this->school->employees->all(['employment_details','classes']) as $employee) 
+      {
+        $is_current = $employee->employment_details->data->current;
+        $is_teacher = $employee->employment_details->data->teaching_staff;
+        if ($is_current && $is_teacher)
+        {
+          $teachers[] = $employee;
+        }
+      }
+
+      // order by surname 
+      array_multisort(
+      array_column($teachers,'surname'), SORT_ASC,$teachers);
+      $data['teachers'] = $teachers;
       return view('school_homepage',$data);
+    }
+
+    public function teacher_classes()
+    {
+      $teacher_id = ($_POST['teacher_id']) ? $_POST['teacher_id'] : FALSE;
+      if ( ! $teacher_id)
+      {
+        $this->load->error(404,'Requires a Teacher id');
+      }      
+      echo '<pre>';
+      print_r($teacher_id);
+      echo '</pre>';
+      die();
+      die();
     }
 
     private function authentication()
@@ -81,5 +103,11 @@ class Home extends BaseController
       catch (\Exception $e) {
        return (object) array('code'=>403,'msg'=>$e->getMessage());
       }
+    }
+
+    private function load_error($code,$msg)
+    {
+      // if authentication is not approved
+      return view('custom_error',array('code'=>$code,'msg'=>$msg));
     }
 }

@@ -30,7 +30,8 @@ $routes->set404Override();
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
-
+$routes->get('teacher_classes(:any)', 'Home::teacher_classes/$1');
+$routes->post('teacher_classes(:any)', 'Home::teacher_classes/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
