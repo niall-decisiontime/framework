@@ -67,7 +67,7 @@ class Home extends BaseController
          $class_mis_ids[] = $tc->mis_id;
         }
       }
-    
+
       $mis_id_string = implode(",",$class_mis_ids);
       $classes = array();
       foreach ($this->school->classes->all([], ['only_mis_ids'=>$mis_id_string,'has_students'=>'1']) as $class) 
