@@ -42,8 +42,7 @@ class Home extends BaseController
       }
 
       // order by surname 
-      array_multisort(
-      array_column($teachers,'surname'),SORT_ASC,$teachers);
+      array_multisort(array_column($teachers,'surname'),SORT_ASC,$teachers);
       $data['teachers'] = $teachers;
       return view('school_homepage',$data);
     }
@@ -51,21 +50,38 @@ class Home extends BaseController
     public function teacher_classes()
     {
       $teacher_id = ($_POST['teacher_id']) ? $_POST['teacher_id'] : FALSE;
-      if ( ! $teacher_id)
+      $teacher_mis_id = ($_POST['teacher_mis_id']) ? $_POST['teacher_mis_id'] : FALSE;
+      if ( ! $teacher_id || ! $teacher_mis_id)
       {
         $this->error(404,'Requires a Teacher id');
       }      
 
-      foreach ($this->school->employees->all(['classes'], ['only_mis_ids'=>$teacher_id]) as $teacher) 
+      $teacher = $this->school->employees->get($teacher_id);
+      $data['teacher'] = $teacher;
+
+      $class_mis_ids = array();
+      foreach ($this->school->employees->all(['classes'], ['only_mis_ids'=>$teacher_mis_id]) as $teacher) 
       {
-        foreach ($teacher->classes as $tc)
+        foreach ($teacher->classes->data as $key=>$tc)
         {
-         echo '<pre>';
-         print_r($tc);
-         echo '</pre>';
-         die();
+         $class_mis_ids[] = $tc->mis_id;
         }
       }
+    
+      $mis_id_string = implode(",",$class_mis_ids);
+      $classes = array();
+      foreach ($this->school->classes->all([], ['only_mis_ids'=>$mis_id_string,'has_students'=>'1']) as $class) 
+      {
+        foreach ($teacher->classes->data as $key=>$tc)
+        {
+          if ( ! isset($classes[$tc->id]))
+          {
+            $classes[$tc->id] = $tc;
+          }
+        }
+      }
+      $data['classes'] = $classes;
+      return view('class_list',$data);
     }
 
     private function authentication()

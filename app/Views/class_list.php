@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo htmlspecialchars($school->name);?></title>
+    <title>Class List</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="description" content="The small framework with powerful features">
@@ -224,9 +224,8 @@
     </div>
 
     <div class="heroe">
-        <h1><?php echo htmlspecialchars($school->name);?></h1>
-        <h2>The best place for <?php echo htmlspecialchars(strtolower($school->phase_of_education));?> education!</h2>
-        <h3><?php echo htmlspecialchars($school->address->address_country->name);?>, <?php echo htmlspecialchars($school->address->address_country->code);?></h3>
+        <h1>Class List for <?php echo htmlspecialchars($teacher->title);?> <?php echo htmlspecialchars($teacher->forename);?> <?php echo htmlspecialchars($teacher->surname);?></h1>
+        <h2>Select a class from the list below</h2>
     </div>
 
 </header>
@@ -235,29 +234,28 @@
 
 <section>
 
-    <h3>Please select the Teacher, whose schedule you wish to see:</h3>
+    <h3>Please select the Class, whose attendance you wish to see:</h3>
     <table class="table table-bordered table-condensed table-striped table-hover">
       <thead class="thead-light">
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Title</th>
-          <th scope="col">Initials</th>
-          <th scope="col">ID</th>
+          <th scope="col">Class Name</th>
+          <th scope="col">Class ID</th>
+          <th scope="col">Subject ID</th>
+          <th scope="col">Role</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($teachers as $teacher): ?>
-        <tr class='table-row' data-teacher_id=<?php echo htmlspecialchars($teacher->id);?> data-teacher_mis_id=<?php echo htmlspecialchars($teacher->mis_id);?>>
-            <th scope="row"><?php echo htmlspecialchars($teacher->surname);?>, <?php echo htmlspecialchars($teacher->forename);?></th>
-            <td><?php echo htmlspecialchars($teacher->title);?></td>
-            <td><?php echo htmlspecialchars($teacher->initials);?></td>
-            <td><?php echo htmlspecialchars($teacher->mis_id);?></td>
-        </tr>
+        <?php foreach ($classes as $class): ?>
+          <tr class='table-row' data-class_id=<?php echo htmlspecialchars($class->id);?> data-class_mis_id=<?php echo htmlspecialchars($class->mis_id);?>>
+            <th scope="row"><?php echo htmlspecialchars($class->name);?></th>
+            <td><?php echo htmlspecialchars($class->id);?></td>
+            <td><?php echo htmlspecialchars($class->subject);?></td>
+            <td><?php echo htmlspecialchars($class->meta->role);?></td>
+          </tr>
         <?php endforeach; ?>
       </tbody>
       <form style="display: none" action="<?php echo site_url('teacher_classes/');?>" method="POST" id="teacher_classes_form">
         <input type="hidden" id="teacher_id" name="teacher_id" value=""/>
-        <input type="hidden" id="teacher_mis_id" name="teacher_mis_id" value=""/>
       </form>
     </table>
 
@@ -296,7 +294,6 @@
     $(document).ready(function($) {
     $(".table-row").click(function() {
       $("#teacher_id").val($(this).data("teacher_id"));
-      $("#teacher_mis_id").val($(this).data("teacher_mis_id"));
       $("#teacher_classes_form").submit();
     });
   });
