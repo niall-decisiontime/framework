@@ -92,15 +92,20 @@ class Home extends BaseController
       {
         return $this->error(404,'Requires a Class ID');
       }    
+      $class = $this->school->classes->get($class_id);
+      $data['class'] = $class;
 
-      echo '<pre>';
-      print_r($class_id);
-      echo '</pre>';
-      echo '<pre>';
-      print_r($class_mis_id);
-      echo '</pre>';
-      die();
-      die();
+      $students = array();
+      $students_in_class_ids = array();
+      foreach ($this->school->classes->all(['students'], ['only_mis_ids'=>$class_mis_id,'has_students'=>'1']) as $class) 
+      {
+        $students = $class->students->data;
+      }
+
+      // order by surname 
+      array_multisort(array_column($students,'surname'),SORT_ASC,$students);
+      $data['students'] = $students;
+      return view('student_list',$data);
     }
 
     private function authentication()

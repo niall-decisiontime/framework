@@ -577,7 +577,7 @@ class CodeIgniter
     {
         // Make sure ENVIRONMENT isn't already set by other means.
         if (! defined('ENVIRONMENT')) {
-            define('ENVIRONMENT', env('CI_ENVIRONMENT', 'production'));
+            define('ENVIRONMENT', env('CI_ENVIRONMENT', 'development'));
         }
     }
 
