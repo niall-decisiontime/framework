@@ -53,7 +53,7 @@ class Home extends BaseController
       $teacher_mis_id = ($_POST['teacher_mis_id']) ? $_POST['teacher_mis_id'] : FALSE;
       if ( ! $teacher_id || ! $teacher_mis_id)
       {
-        $this->error(404,'Requires a Teacher id');
+        return $this->error(404,'Requires a Teacher id');
       }      
 
       $teacher = $this->school->employees->get($teacher_id);
@@ -86,9 +86,20 @@ class Home extends BaseController
 
     public function students_in_class()
     {
+      $class_id = ($_POST['class_id']) ? $_POST['class_id'] : FALSE;
+      $class_mis_id = ($_POST['class_mis_id']) ? $_POST['class_mis_id'] : FALSE;
+      if ( ! $class_id || ! $class_mis_id)
+      {
+        return $this->error(404,'Requires a Class ID');
+      }    
+
       echo '<pre>';
-      print_r($_POST);
+      print_r($class_id);
       echo '</pre>';
+      echo '<pre>';
+      print_r($class_mis_id);
+      echo '</pre>';
+      die();
       die();
     }
 
