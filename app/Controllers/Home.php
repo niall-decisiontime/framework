@@ -1,37 +1,25 @@
 <?php
 
 namespace App\Controllers;
+use App\Libraries\Wonde_API;
 class Home extends BaseController
-{
-    private $base_url;
-    private $api_token; 
-    private $school_id;
-    private $client;
-  
+{ 
     public function __construct()
     {
-      $this->base_url = 'https://api.wonde.com/v1.0';
-      $this->api_token = '2302e6c82cb36c3ad619d9372b9f6808ba2a560c'; ///needs to move to env variable
-      $this->school_id = 'A1930499544'; 
-      $this->client = new \Wonde\Client($this->api_token);
-      $this->school = $this->client->school($this->school_id);
+      $this->wonde = new Wonde_API();
     }
 
     public function index()
     {
-      $auth = $this->authentication();
-      if ($auth->code != 200)
-      {
-        $this->error($auth->code,$auth->msg);
-      }
-
       // school details
-      $school = $this->client->schools->get($this->school_id);
+      $school = $this->wonde->get_school();
       $data['school'] = $school;
 
-      // teachers
+      // employees
       $teachers = array();
-      foreach ($this->school->employees->all(['employment_details','classes'], ['has_class'=>'1']) as $employee) 
+      $employees = $this->wonde->get_employees(array('employment_details'), array('has_class'=>'1'));
+
+      foreach ($employees as $employee) 
       {
         $is_current = $employee->employment_details->data->current;
         $is_teacher = $employee->employment_details->data->teaching_staff;
@@ -40,7 +28,6 @@ class Home extends BaseController
           $teachers[] = $employee;
         }
       }
-
       // order by surname 
       array_multisort(array_column($teachers,'surname'),SORT_ASC,$teachers);
       $data['teachers'] = $teachers;
@@ -56,31 +43,9 @@ class Home extends BaseController
         return $this->error(404,'Requires a Teacher id');
       }      
 
-      $teacher = $this->school->employees->get($teacher_id);
+      $teacher = $this->wonde->get_employee($teacher_id,array('classes'),array('only_mis_ids'=>$teacher_mis_id));
       $data['teacher'] = $teacher;
-
-      $class_mis_ids = array();
-      foreach ($this->school->employees->all(['classes'], ['only_mis_ids'=>$teacher_mis_id]) as $teacher) 
-      {
-        foreach ($teacher->classes->data as $key=>$tc)
-        {
-         $class_mis_ids[] = $tc->mis_id;
-        }
-      }
-
-      $mis_id_string = implode(",",$class_mis_ids);
-      $classes = array();
-      foreach ($this->school->classes->all([], ['only_mis_ids'=>$mis_id_string,'has_students'=>'1']) as $class) 
-      {
-        foreach ($teacher->classes->data as $key=>$tc)
-        {
-          if ( ! isset($classes[$tc->id]))
-          {
-            $classes[$tc->id] = $tc;
-          }
-        }
-      }
-      $data['classes'] = $classes;
+      $data['classes'] = $teacher->classes->data;
       return view('class_list',$data);
     }
 
@@ -92,63 +57,14 @@ class Home extends BaseController
       {
         return $this->error(404,'Requires a Class ID');
       }    
-      $class = $this->school->classes->get($class_id);
+      $class = $this->wonde->get_class($class_id,array('students','students.house'),array('only_mis_ids'=>$class_mis_id,'has_students'=>'1'));
       $data['class'] = $class;
 
-      $students = array();
-      $students_in_class_ids = array();
-      foreach ($this->school->classes->all(['students'], ['only_mis_ids'=>$class_mis_id,'has_students'=>'1']) as $class) 
-      {
-        $students = $class->students->data;
-      }
-
       // order by surname 
+      $students = $class->students->data;
       array_multisort(array_column($students,'surname'),SORT_ASC,$students);
       $data['students'] = $students;
       return view('student_list',$data);
-    }
-
-    private function authentication()
-    {
-      try {
-        // Initialize a cURL session
-        $curl = curl_init();
-
-        // Set cURL options
-        curl_setopt($curl, CURLOPT_URL, $this->base_url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($curl, CURLOPT_HTTPHEADER, [
-            'Authorization: Bearer ' . $this->api_token,
-        ]);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, TRUE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-
-        // Execute the cURL request
-        $response = curl_exec($curl);
-        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $response = json_decode($response);
-
-        if ($http_code != 200) 
-        {
-          curl_close($curl);
-          if ($response->error)
-          {
-            return (object) array('code'=>$http_code,'msg'=>($response->error_description) ? $response->error_description : $response->error);
-          }
-          else 
-          {
-            throw new \Exception("ERROR: There has been an issue with this authentication. Please check your entries and try again.");
-          }
-        }
-        else 
-        {
-          return (object) array('code'=>$http_code,'msg'=>'Success');
-        }
-      }
-      catch (\Exception $e) {
-       return (object) array('code'=>403,'msg'=>$e->getMessage());
-      }
     }
 
     private function error($code,$msg)

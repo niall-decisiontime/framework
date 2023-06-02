@@ -218,7 +218,7 @@
     </div>
 
     <div class="heroe">
-      <h1><?php echo htmlspecialchars($class->name);?></h1>
+      <h1>Class: <?php echo htmlspecialchars($class->name);?></h1>
       <h2>Select a student from the list below</h2>
     </div>
 
@@ -233,7 +233,8 @@
       <thead class="thead-light">
         <tr>
           <th scope="col">Name</th>
-          <th scope="col">Initals</th>
+          <th scope="col">House</th>
+          <th scope="col">Campus</th>
           <th scope="col">Student ID</th>
         </tr>
       </thead>
@@ -241,6 +242,7 @@
         <?php foreach ($students as $student): ?>
           <tr class='table-row' data-student_id=<?php echo htmlspecialchars($student->id);?> data-class_mis_id=<?php echo htmlspecialchars($student->mis_id);?>>
             <th scope="row"><?php echo htmlspecialchars($student->surname);?>, <?php echo htmlspecialchars($student->forename);?></th>
+            <td><?php echo htmlspecialchars($student->house->data->name);?></td>
             <td><?php echo htmlspecialchars($student->initials);?></td>
             <td><?php echo htmlspecialchars($student->id);?></td>
           </tr>
