@@ -235,7 +235,7 @@
 
 <section>
 
-    <h3>Please select the Teacher, whose schedule you wish to see:</h3>
+    <h3>Please select the Teacher, whose classes you wish to see:</h3>
     <table class="table table-bordered table-condensed table-striped table-hover">
       <thead class="thead-light">
         <tr>

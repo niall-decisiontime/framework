@@ -224,8 +224,8 @@
     </div>
 
     <div class="heroe">
-        <h1>Class List for <?php echo htmlspecialchars($teacher->title);?> <?php echo htmlspecialchars($teacher->forename);?> <?php echo htmlspecialchars($teacher->surname);?></h1>
-        <h2>Select a class from the list below</h2>
+      <h1><?php echo htmlspecialchars($teacher->title);?> <?php echo htmlspecialchars($teacher->forename);?> <?php echo htmlspecialchars($teacher->surname);?></h1>
+      <h2>Select a class from the list below</h2>
     </div>
 
 </header>
@@ -234,7 +234,7 @@
 
 <section>
 
-    <h3>Please select the Class, whose attendance you wish to see:</h3>
+    <h3>Please select the Class, whose students you wish to see:</h3>
     <table class="table table-bordered table-condensed table-striped table-hover">
       <thead class="thead-light">
         <tr>
@@ -254,8 +254,9 @@
           </tr>
         <?php endforeach; ?>
       </tbody>
-      <form style="display: none" action="<?php echo site_url('teacher_classes/');?>" method="POST" id="teacher_classes_form">
-        <input type="hidden" id="teacher_id" name="teacher_id" value=""/>
+      <form style="display: none" action="<?php echo site_url('students_in_class/');?>" method="POST" id="teacher_classes_form">
+        <input type="hidden" id="class_id" name="class_id" value=""/>
+        <input type="hidden" id="class_mis_id" name="class_mis_id" value=""/>
       </form>
     </table>
 
@@ -293,7 +294,8 @@
     }
     $(document).ready(function($) {
     $(".table-row").click(function() {
-      $("#teacher_id").val($(this).data("teacher_id"));
+      $("#class_id").val($(this).data("class_id"));
+      $("#class_mis_id").val($(this).data("class_mis_id"));
       $("#teacher_classes_form").submit();
     });
   });

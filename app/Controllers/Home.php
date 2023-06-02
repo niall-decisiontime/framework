@@ -84,6 +84,14 @@ class Home extends BaseController
       return view('class_list',$data);
     }
 
+    public function students_in_class()
+    {
+      echo '<pre>';
+      print_r($_POST);
+      echo '</pre>';
+      die();
+    }
+
     private function authentication()
     {
       try {
