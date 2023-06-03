@@ -36,8 +36,9 @@ class Home extends BaseController
 
     public function teacher_classes()
     {
-      $teacher_id = ($_POST['teacher_id']) ? $_POST['teacher_id'] : FALSE;
-      $teacher_mis_id = ($_POST['teacher_mis_id']) ? $_POST['teacher_mis_id'] : FALSE;
+      $request_payload = $this->get_request_payload();
+      $teacher_id = ($request_payload['teacher_id']) ? $request_payload['teacher_id'] : FALSE;
+      $teacher_mis_id = ($request_payload['teacher_mis_id']) ? $request_payload['teacher_mis_id'] : FALSE;
       if ( ! $teacher_id || ! $teacher_mis_id)
       {
         return $this->error(404,'Requires a Teacher id');
@@ -51,8 +52,9 @@ class Home extends BaseController
 
     public function students_in_class()
     {
-      $class_id = ($_POST['class_id']) ? $_POST['class_id'] : FALSE;
-      $class_mis_id = ($_POST['class_mis_id']) ? $_POST['class_mis_id'] : FALSE;
+      $request_payload = $this->get_request_payload();
+      $class_id = ($request_payload['class_id']) ? $request_payload['class_id'] : FALSE;
+      $class_mis_id = ($request_payload['class_mis_id']) ? $request_payload['class_mis_id'] : FALSE;
       if ( ! $class_id || ! $class_mis_id)
       {
         return $this->error(404,'Requires a Class ID');
@@ -67,8 +69,33 @@ class Home extends BaseController
       return view('student_list',$data);
     }
 
+    public function lessons_for_class()
+    {
+      $request_payload = $this->get_request_payload();
+      $class_id = ($request_payload['class_id']) ? $request_payload['class_id'] : FALSE;
+      $class_mis_id = ($request_payload['class_mis_id']) ? $request_payload['class_mis_id'] : FALSE;
+      if ( ! $class_id || ! $class_mis_id)
+      {
+        return $this->error(404,'Requires a Class ID');
+      }   
+      $class = $this->wonde->get_class($class_id,array('students','students.house'),array('only_mis_ids'=>$class_mis_id,'has_students'=>'1'));
+      $data['class'] = $class;
+
+      $lessons = $this->wonde->get_lessons_for_class($class_id);
+      // order by date
+      array_multisort(array_column($lessons, 'start_at'), SORT_ASC,$lessons);
+      $data['lessons'] = $lessons;
+      return view('lessons',$data);
+    }
+
     private function error($code,$msg)
     {
       return view('custom_error',array('code'=>$code,'msg'=>$msg));
+    }
+
+    private function get_request_payload()
+    {   
+      $request_payload = $this->request->getPost();
+      return $request_payload;
     }
 }

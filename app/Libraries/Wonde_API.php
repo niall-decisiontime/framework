@@ -54,6 +54,21 @@ class Wonde_API
     return $classes;
   }
 
+  public function get_lessons_for_class($class_id)
+  {
+    $class_lessons = array();
+    $lessons = $this->school->lessons->all(['class'],['updated_after'=>'2023-04-04 00:00:00','lessons_start_after'=>'2023-04-03 00:00:00']);
+    foreach ($lessons as $lesson)
+    {
+      if ($lesson->class->data->id == $class_id)
+      {
+        $lesson->start_time = $lesson->start_at->date;
+        $class_lessons[] = $lesson;
+      }
+    }
+    return $class_lessons;
+  }
+
   private function authentication()
   {
     try {

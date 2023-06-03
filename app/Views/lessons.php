@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student List</title>
+    <title>Lessons List</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <meta name="description" content="The small framework with powerful features">
@@ -218,12 +218,7 @@
     </div>
 
     <div class="heroe">
-      <h1>Class: <?php echo htmlspecialchars($class->name);?></h1>
-      <button type="button" class="btn btn-primary class_lessons_button" data-class_id="<?php echo htmlspecialchars($class->id);?>" data-class_mis_id="<?php echo htmlspecialchars($class->mis_id);?>">View lessons for this class</button>
-      <form action="<?php echo site_url('lessons_for_class/');?>" method="POST" id="lessons_for_class_form">
-        <input type="hidden" id="class_id" name="class_id" value=""/>
-        <input type="hidden" id="class_mis_id" name="class_mis_id" value=""/>
-      </form>
+      <h1>Lessons for class: <?php echo htmlspecialchars($class->name);?></h1>
     </div>
 
 </header>
@@ -232,27 +227,36 @@
 
 <section>
 
-    <h3>Please see the list of Students below:</h3>
+    <h3>Lessons listed below:</h3>
     <table class="table table-bordered table-condensed table-striped table-hover">
       <thead class="thead-light">
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">House</th>
-          <th scope="col">Campus</th>
-          <th scope="col">Student ID</th>
+          <th scope="col">ID</th>
+          <th scope="col">Room</th>
+          <th scope="col">Start</th>
+          <th scope="col">End</th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($students as $student): ?>
-          <tr class='table-row' data-student_id=<?php echo htmlspecialchars($student->id);?> data-class_mis_id=<?php echo htmlspecialchars($student->mis_id);?>>
-            <th scope="row"><?php echo htmlspecialchars($student->surname);?>, <?php echo htmlspecialchars($student->forename);?></th>
-            <td><?php echo htmlspecialchars($student->house->data->name);?></td>
-            <td><?php echo htmlspecialchars($student->initials);?></td>
-            <td><?php echo htmlspecialchars($student->id);?></td>
+        <?php foreach ($lessons as $lesson): ?>
+          <tr class='table-row' data-lesson_id=<?php echo htmlspecialchars($lesson->id);?> data-lesson_mis_id=<?php echo htmlspecialchars($lesson->mis_id);?>>
+            <td><?php echo htmlspecialchars($lesson->id);?></td>
+            <td><?php echo htmlspecialchars($lesson->room);?></td>
+            <?php $start_date = date_create($lesson->start_at->date);?>
+            <?php $start_date = date_format($start_date,"D jS M Y H:ia");?>
+            <?php $end_date = date_create($lesson->end_at->date);?>
+            <?php $end_date = date_format($end_date,"D jS M Y H:ia");?>
+            <td><?php echo htmlspecialchars($start_date);?></td>
+            <td><?php echo htmlspecialchars($end_date);?></td>
           </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
+
+    <form style="display: none;" action="<?php echo site_url('attendance_for_lesson/');?>" method="POST" id="attendance_for_lesson_form">
+      <input type="hidden" id="lesson_id" name="lesson_id" value=""/>
+      <input type="hidden" id="lesson_mis_id" name="lesson_mis_id" value=""/>
+    </form>
 
 </section>
 
@@ -287,10 +291,10 @@
         }
     }
     $(document).ready(function($) {
-    $(".class_lessons_button").click(function() {
-      $("#class_id").val($(this).data("class_id"));
-      $("#class_mis_id").val($(this).data("class_mis_id"));
-      $("#lessons_for_class_form").submit();
+      $(".table-row").click(function() {
+        $("#class_id").val($(this).data("class_id"));
+        $("#class_mis_id").val($(this).data("class_mis_id"));
+        $("#teacher_classes_form").submit();
     });
   });
 </script>

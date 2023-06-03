@@ -34,6 +34,8 @@ $routes->get('teacher_classes(:any)', 'Home::teacher_classes/$1');
 $routes->post('teacher_classes(:any)', 'Home::teacher_classes/$1');
 $routes->get('students_in_class(:any)', 'Home::students_in_class/$1');
 $routes->post('students_in_class(:any)', 'Home::students_in_class/$1');
+$routes->get('lessons_for_class(:any)', 'Home::lessons_for_class/$1');
+$routes->post('lessons_for_class(:any)', 'Home::lessons_for_class/$1');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
