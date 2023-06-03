@@ -291,11 +291,13 @@
         }
     }
     $(document).ready(function($) {
+      /*
       $(".table-row").click(function() {
         $("#class_id").val($(this).data("class_id"));
         $("#class_mis_id").val($(this).data("class_mis_id"));
         $("#teacher_classes_form").submit();
     });
+    */
   });
 </script>
 
