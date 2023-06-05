@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Student List</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- SCRIPTS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <meta name="description" content="The small framework with powerful features">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/png" href="/favicon.ico">
@@ -237,7 +243,7 @@
           <th scope="col">Name</th>
           <th scope="col">House</th>
           <th scope="col">Campus</th>
-          <th scope="col">Student ID</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -255,21 +261,19 @@
 </section>
 
 <!-- Modal -->
-<div class="modal" id="student_modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
+<div class="modal fade" id="modelWindow" role="dialog">
+  <div class="modal-dialog modal-sm vertical-align-center">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 id="modal_title" class="modal-title"></h4>
       </div>
       <div class="modal-body">
-        <p>Modal body text goes here.</p>
+         <p>Email: <span id="student_email"></span></p>
+         <p>Mobile: <span id="student_mobile"></span></p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
       </div>
     </div>
   </div>
@@ -296,8 +300,6 @@
 
 </footer>
 
-<!-- SCRIPTS -->
-
 <script>
     function toggleMenu() {
         var menuItems = document.getElementsByClassName('menu-item');
@@ -308,6 +310,9 @@
     }
     $(document).ready(function($) {
       $(".table-row").click(function() {
+        $("#modal_title").text("");
+        $("#student_email").text("");
+        $("#student_mobile").text("");
         get_student_details($(this).data("student_id"));
       });
     });
@@ -321,8 +326,14 @@
         student_id: student_id
       }
       }).done(function(response) {
-          if (response.success) {
-            alert('here');
+          if (response.success) { 
+            $("#modal_title").text(response.data.forename + ' ' + response.data.surname);
+            var contact_details = response.data.contact_details.data;
+            var email = (contact_details.emails.email === null) ? "No email provided" : contact_details.emails.email;
+            var mobile = (contact_details.phones.mobile === null) ? "No mobile provided" : contact_details.phones.mobile;
+            $("#student_email").text(email);
+            $("#student_mobile").text(mobile);
+            $('#modelWindow').modal('show');
           } else {
             alert("An error has occurred");
           }
