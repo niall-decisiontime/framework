@@ -30,6 +30,12 @@ class Wonde_API
     return $school; 
   }
 
+  public function get_student($student_id,$includes=array(),$params=array())
+  {
+    $student = $this->school->students->get($student_id,$includes,$params);
+    return $student;
+  }
+
   public function get_employee($employee_id,$includes=array(),$params=array())
   {
     $employee = $this->school->employees->get($employee_id,$includes,$params);
@@ -46,27 +52,6 @@ class Wonde_API
   {
     $employees = $this->school->employees->all($includes,$params);
     return $employees;
-  }
-
-  public function get_classes($includes=array(), $params=array())
-  {
-    $classes = $this->school->classes->all($includes,$params);
-    return $classes;
-  }
-
-  public function get_lessons_for_class($class_id)
-  {
-    $class_lessons = array();
-    $lessons = $this->school->lessons->all(['class'],['updated_after'=>'2023-04-04 00:00:00','lessons_start_after'=>'2023-04-03 00:00:00']);
-    foreach ($lessons as $lesson)
-    {
-      if ($lesson->class->data->id == $class_id)
-      {
-        $lesson->start_time = $lesson->start_at->date;
-        $class_lessons[] = $lesson;
-      }
-    }
-    return $class_lessons;
   }
 
   private function authentication()
@@ -107,8 +92,8 @@ class Wonde_API
         return (object) array('code'=>$http_code,'msg'=>'Success');
       }
     }
-     catch (\Exception $e) {
-     return (object) array('code'=>403,'msg'=>$e->getMessage());
+    catch (\Exception $e) {
+    return (object) array('code'=>403,'msg'=>$e->getMessage());
     }
   }
 }

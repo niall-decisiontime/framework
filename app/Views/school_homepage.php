@@ -229,7 +229,7 @@
 
 <section>
 
-    <h3>Please select the Teacher, whose classes you wish to see:</h3>
+    <h3>Please select the Teacher, whose timetable you wish to see:</h3>
     <table class="table table-bordered table-condensed table-striped table-hover">
       <thead class="thead-light">
         <tr>
@@ -249,7 +249,7 @@
         </tr>
         <?php endforeach; ?>
       </tbody>
-      <form style="display: none" action="<?php echo site_url('teacher_classes/');?>" method="POST" id="teacher_classes_form">
+      <form style="display: none" action="<?php echo site_url('teacher_timetable/');?>" method="POST" id="teacher_classes_form">
         <input type="hidden" id="teacher_id" name="teacher_id" value=""/>
         <input type="hidden" id="teacher_mis_id" name="teacher_mis_id" value=""/>
       </form>
