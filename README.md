@@ -1,4 +1,4 @@
-# used_car_listings_ci4
+# Wonde API using CI4
 A project that uses Codeigniter 4 and uses the Wonde API with an example school.
 
 Codeigniter 4 docs: https://codeigniter.com/user_guide/intro/index.html
