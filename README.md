@@ -7,6 +7,9 @@ This project has an interface which allows us to view the teachers that are with
 
 This is built in Codeigniter 4, which has an in built server we can use, so no need for docker to run this project.
 
+The Wonde API is called from the Wonde_API library that I have created in this project.
+Wonde docs: https://docs.wonde.com/docs/api/sync#introduction
+
 
 # This is how the interface should look once set up is complete:
 
