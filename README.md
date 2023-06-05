@@ -19,7 +19,7 @@ Wonde docs: https://docs.wonde.com/docs/api/sync#introduction
 # Steps to set up project
 
 1. Copy this repository code to your machine. 
-2.  Via the command line, cd into the directory where this project sits and run the spark command to get the localhost running. My folder structure is Projects > used_car_listings, so I will run the commands:
+2.  Via the command line, cd into the directory where this project sits and run the spark command to get the localhost running. My folder structure is Projects > wonde, so I will run the commands:
 - `cd Projects`
 - `cd wonde`
 - `php spark serve`
