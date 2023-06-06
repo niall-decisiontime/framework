@@ -1,54 +1,53 @@
-# CodeIgniter 4 Framework
+# Wonde API using CI4
+A project that uses Codeigniter 4 and uses the Wonde API with an example school.
 
-## What is CodeIgniter? edit
+Codeigniter 4 docs: https://codeigniter.com/user_guide/intro/index.html
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+This project has an interface which allows us to view the teachers that are within a school, their timetable for the week and their students.
 
-This repository holds the distributable version of the framework.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+This is built in Codeigniter 4, which has an in built server we can use, so no need for docker to run this project.
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+The Wonde API is called from the Wonde_API library that I have created in this project.
+Wonde docs: https://docs.wonde.com/docs/api/sync#introduction
 
-The user guide corresponding to the latest version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/).
 
-## Important Change with index.php
+# This is how the interface should look once set up is complete:
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+![Screenshot 2023-06-05 at 15 02 01](https://github.com/niall-decisiontime/wonde-api/assets/55992683/1a6e395a-c686-4523-ac09-257c9decd268)
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+# Steps to set up project
 
-## Repository Management
+1. Copy this repository code to your machine. 
+2.  Via the command line, cd into the directory where this project sits and run the spark command to get the localhost running. My folder structure is Projects > wonde, so I will run the commands:
+- `cd Projects`
+- `cd wonde`
+- `php spark serve`
+3. You should now be able to access the site via: http://localhost:8080/
+4. When you go to this URL you will see a list of teachers within the school
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+# Functionality
 
-## Contributing
+1. Select a teacher to see their classes and lessons for the week - the rows are clickable
 
-We welcome contributions from the community.
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/CONTRIBUTING.md) section in the development repository.
+<img width="1440" alt="Screenshot 2023-06-05 at 15 06 12" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/74aefcc5-e003-4213-82c2-4464761e41eb">
 
-## Server Requirements
 
-PHP version 7.4 or higher is required, with the following extensions installed:
+2. You will be directed to a screen that shows the timetable of the teachers classes, ordered by start time in ascending order.
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+<img width="1440" alt="Screenshot 2023-06-05 at 15 06 31" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/1fa0d603-195b-42e8-ae5f-7c8b67b6a3ae">
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+3. If you click on a lesson, you will be directed to the screen that shows all the students in the class
+
+
+<img width="1440" alt="Screenshot 2023-06-05 at 15 07 25" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/b8ab8a90-2120-48df-b743-aa427d1014ab">
+
+
+4. If you then click on a student, a modal will appear with their contact details: 
+
+
+<img width="1440" alt="Screenshot 2023-06-05 at 15 09 13" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/2520c442-0494-4eaf-a29e-77bf9f62127e">
