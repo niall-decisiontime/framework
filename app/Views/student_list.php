@@ -236,7 +236,7 @@
 
 <section>
 
-    <h3>Please see the list of Students below:</h3>
+    <h3>Click a student to view their contact details:</h3>
     <table class="table table-bordered table-condensed table-striped table-hover">
       <thead class="thead-light">
         <tr>
