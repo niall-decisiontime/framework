@@ -92,8 +92,9 @@ class Wonde_API
         return (object) array('code'=>$http_code,'msg'=>'Success');
       }
     }
-    catch (\Exception $e) {
-    return (object) array('code'=>403,'msg'=>$e->getMessage());
+    catch (\Exception $e) 
+    {
+      return (object) array('code'=>403,'msg'=>$e->getMessage());
     }
   }
 }
