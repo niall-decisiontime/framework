@@ -3,7 +3,7 @@
 class Wonde_API
 {
   private $base_url;
-  private $api_toke;
+  private $api_token;
   private $school_id;
   private $school;
   private $client;
