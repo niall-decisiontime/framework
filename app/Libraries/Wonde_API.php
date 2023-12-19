@@ -20,6 +20,7 @@ class Wonde_API
     if ($auth->code != 200)
     {
       echo "ERROR: ".$auth->msg;
+      log_message("error","app-logs::Wonde_API::__construct An error has ocurred: {$auth->msg}");
       die();
     }
   }
