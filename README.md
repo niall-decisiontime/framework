@@ -36,6 +36,8 @@ Wonde docs: https://docs.wonde.com/docs/api/sync#introduction
 
 
 
+
+
 2. You will be directed to a screen that shows the timetable of the teachers classes, ordered by start time in ascending order.
 
 
@@ -43,10 +45,14 @@ Wonde docs: https://docs.wonde.com/docs/api/sync#introduction
 
 
 
+
+
 3. If you click on a lesson, you will be directed to the screen that shows all the students in the class
 
 
 <img width="1440" alt="Screenshot 2023-06-05 at 15 07 25" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/b8ab8a90-2120-48df-b743-aa427d1014ab">
+
+
 
 
 
