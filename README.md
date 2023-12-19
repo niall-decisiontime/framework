@@ -35,16 +35,19 @@ Wonde docs: https://docs.wonde.com/docs/api/sync#introduction
 <img width="1440" alt="Screenshot 2023-06-05 at 15 06 12" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/74aefcc5-e003-4213-82c2-4464761e41eb">
 
 
+
 2. You will be directed to a screen that shows the timetable of the teachers classes, ordered by start time in ascending order.
 
 
 <img width="1440" alt="Screenshot 2023-06-05 at 15 06 31" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/1fa0d603-195b-42e8-ae5f-7c8b67b6a3ae">
 
 
+
 3. If you click on a lesson, you will be directed to the screen that shows all the students in the class
 
 
 <img width="1440" alt="Screenshot 2023-06-05 at 15 07 25" src="https://github.com/niall-decisiontime/wonde-api/assets/55992683/b8ab8a90-2120-48df-b743-aa427d1014ab">
+
 
 
 4. If you then click on a student, a modal will appear with their contact details: 
